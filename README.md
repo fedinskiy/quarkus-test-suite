@@ -263,6 +263,14 @@ Container images used in the tests are:
   - version 10.6: `quay.io/quarkusqeteam/mariadb:10.6.4`
 - MSSQL: `mcr.microsoft.com/mssql/rhel/server`
 
+### `sql-db/hibernate-reactive`
+Verifies that the application can work with data persisted in SQL database in reactive manner. Basically, the same as `sql-app`, but reactive.
+Covered DBs:
+- Postgres
+- MySQL
+- DB2
+- MSSQL
+
 ### `sql-db/vertx-sql`
 Quarkus / Vertx SQL exploratory testing. A flight search engine in order to test Quarkus Reactive SQL extensions. A detailed description can be found in sql-db/vertx-sql/README.md
 
@@ -709,7 +717,6 @@ It covers different usages:
 3. from a REST controller endpoint (using `@RestController)
 
 More information about this extension in https://quarkus.io/guides/spring-cache.
-
 
 ### `test-tooling/pact`
 
