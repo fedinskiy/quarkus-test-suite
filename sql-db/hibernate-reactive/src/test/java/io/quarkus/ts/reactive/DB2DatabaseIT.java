@@ -1,7 +1,5 @@
 package io.quarkus.ts.reactive;
 
-import org.junit.jupiter.api.Disabled;
-
 import io.quarkus.test.bootstrap.Db2Service;
 import io.quarkus.test.bootstrap.RestService;
 import io.quarkus.test.scenarios.QuarkusScenario;
@@ -33,8 +31,4 @@ public class DB2DatabaseIT extends AbstractReactiveDatabaseIT {
         return app;
     }
 
-    @Override
-    @Disabled
-    public void testGeneratedId() {
-    } //fails on Ubuntu 20.04.3 in GH actions
 }
