@@ -102,4 +102,24 @@ public class GroundedEndpoint {
                     .map(books -> Response.ok(books).build());
         });
     }
+
+    @GET
+    @Path("reproducer/title/{id}")
+    public Uni<Response> getTitleById(Integer id) {
+        return factory.withSession(session -> {
+            return session.createNativeQuery("SELECT title FROM books WHERE id = " + id, String.class)
+                    .getSingleResult()
+                    .map(books -> Response.ok(books).build());
+        });
+    }
+
+    @GET
+    @Path("reproducer/book/{id}")
+    public Uni<Response> getBookById(Integer id) {
+        return factory.withSession(session -> {
+            return session.createNativeQuery("SELECT * FROM books WHERE id = " + id, Book.class)
+                    .getSingleResult()
+                    .map(books -> Response.ok(books.getTitle()).build());
+        });
+    }
 }

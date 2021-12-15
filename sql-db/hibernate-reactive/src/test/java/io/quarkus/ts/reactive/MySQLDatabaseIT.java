@@ -1,7 +1,5 @@
 package io.quarkus.ts.reactive;
 
-import org.junit.jupiter.api.Disabled;
-
 import io.quarkus.test.bootstrap.MySqlService;
 import io.quarkus.test.bootstrap.RestService;
 import io.quarkus.test.scenarios.QuarkusScenario;
@@ -31,17 +29,5 @@ public class MySQLDatabaseIT extends AbstractReactiveDatabaseIT {
     @Override
     protected RestService getApp() {
         return app;
-    }
-
-    @Override
-    @Disabled
-    public void convertValue() {
-
-    }
-
-    @Override
-    @Disabled
-    public void setConvertedValue() {
-
     }
 }

@@ -252,5 +252,19 @@ public abstract class AbstractReactiveDatabaseIT {
         assertEquals(HttpStatus.SC_BAD_REQUEST, creation.statusCode());
     }
 
+    @Test
+    public void reproducerTitle() {
+        Response response = getApp().given().get("/hibernate/reproducer/title/2");
+        assertEquals("Thinking fast and slow", response.body().asString());
+        assertEquals(HttpStatus.SC_OK, response.statusCode());
+    }
+
+    @Test
+    public void reproducerBook() {
+        Response response = getApp().given().get("/hibernate/reproducer/book/2");
+        assertEquals("Thinking fast and slow", response.body().asString());
+        assertEquals(HttpStatus.SC_OK, response.statusCode());
+    }
+
     protected abstract RestService getApp();
 }

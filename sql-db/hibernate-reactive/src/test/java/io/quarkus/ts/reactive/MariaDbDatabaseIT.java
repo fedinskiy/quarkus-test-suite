@@ -1,7 +1,5 @@
 package io.quarkus.ts.reactive;
 
-import org.junit.jupiter.api.Disabled;
-
 import io.quarkus.test.bootstrap.DefaultService;
 import io.quarkus.test.bootstrap.RestService;
 import io.quarkus.test.scenarios.QuarkusScenario;
@@ -9,7 +7,6 @@ import io.quarkus.test.services.Container;
 import io.quarkus.test.services.QuarkusApplication;
 
 @QuarkusScenario
-//TODO results of native query to mariadb or mysql cannot be casted into String. Investigation needed
 public class MariaDbDatabaseIT extends AbstractReactiveDatabaseIT {
 
     private static final String MYSQL_USER = "quarkus_test";
@@ -38,15 +35,4 @@ public class MariaDbDatabaseIT extends AbstractReactiveDatabaseIT {
         return app;
     }
 
-    @Override
-    @Disabled
-    public void convertValue() {
-
-    }
-
-    @Override
-    @Disabled
-    public void setConvertedValue() {
-
-    }
 }
