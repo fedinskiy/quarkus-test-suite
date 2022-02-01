@@ -1,0 +1,10 @@
+services:
+  server:
+    container_name: reproducer
+    image: maven:3.8-jdk-11
+    working_dir: /usr/src/app
+    volumes:
+      - "./:/usr/src/app"
+    command: mvn verify -Dall-modules -pl io.quarkus.ts.qe:qute-multimodule,io.quarkus.ts.qe:qute-api,io.quarkus.ts.qe:qute-test -Dquarkus.platform.version=2.7.0.Final
+    ports:
+      - "8080:8080"
