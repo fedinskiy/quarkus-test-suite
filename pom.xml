@@ -342,19 +342,6 @@
                 </property>
             </activation>
             <modules>
-                <module>config</module>
-                <module>properties</module>
-                <module>javaee-like-getting-started</module>
-                <module>scaling</module>
-                <module>lifecycle-application</module>
-                <module>external-applications</module>
-                <module>scheduling/quartz</module>
-                <module>infinispan-client</module>
-                <module>super-size/many-extensions</module>
-                <module>quarkus-cli</module>
-                <module>kamelet</module>
-                <module>logging/jboss</module>
-                <module>cache/caffeine</module>
                 <module>qute/multimodule</module>
             </modules>
         </profile>
@@ -475,23 +462,6 @@
             <modules>
                 <module>nosql-db/mongodb</module>
                 <module>nosql-db/mongodb-reactive</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>spring-modules</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-                <property>
-                    <name>all-modules</name>
-                </property>
-            </activation>
-            <modules>
-                <module>spring/spring-data</module>
-                <module>spring/spring-web</module>
-                <module>spring/spring-properties</module>
-                <module>spring/spring-cloud-config</module>
-                <module>cache/spring</module>
-                <module>scheduling/spring</module>
             </modules>
         </profile>
         <profile>
