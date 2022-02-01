@@ -356,49 +356,6 @@
             <modules>
                 <module>http/http-minimum</module>
                 <module>http/http-minimum-reactive</module>
-                <module>http/http-advanced</module>
-                <module>http/http-advanced-reactive</module>
-                <module>http/http-static</module>
-                <module>http/jaxrs</module>
-                <module>http/jaxrs-reactive</module>
-                <module>http/reactive-routes</module>
-                <module>http/rest-client</module>
-                <module>http/rest-client-reactive</module>
-                <module>http/servlet-undertow</module>
-                <module>http/vertx-web-client</module>
-                <module>http/hibernate-validator</module>
-                <module>http/graphql</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>sql-db-modules</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-                <property>
-                    <name>all-modules</name>
-                </property>
-            </activation>
-            <modules>
-                <module>sql-db/hibernate</module>
-                <module>sql-db/sql-app</module>
-                <module>sql-db/multiple-pus</module>
-                <module>sql-db/panache-flyway</module>
-                <module>sql-db/vertx-sql</module>
-                <module>sql-db/hibernate-reactive</module>
-                <module>sql-db/reactive-vanilla</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>nosql-db-modules</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-                <property>
-                    <name>all-modules</name>
-                </property>
-            </activation>
-            <modules>
-                <module>nosql-db/mongodb</module>
-                <module>nosql-db/mongodb-reactive</module>
             </modules>
         </profile>
         <profile>
