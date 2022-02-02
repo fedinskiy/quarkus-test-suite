@@ -1,3 +1,4 @@
+version: '3'
 services:
   server:
     container_name: reproducer
@@ -5,6 +6,6 @@ services:
     working_dir: /usr/src/app
     volumes:
       - "./:/usr/src/app"
-    command: mvn verify -Dall-modules -pl io.quarkus.ts.qe:qute-multimodule,io.quarkus.ts.qe:qute-api,io.quarkus.ts.qe:qute-test -Dquarkus.platform.version=2.7.0.Final
+    command: mvn verify -Dall-modules -pl io.quarkus.ts.qe:qute-multimodule,io.quarkus.ts.qe:qute-api,io.quarkus.ts.qe:qute-test -Dquarkus.platform.version=2.7.1.Final
     ports:
       - "8080:8080"
