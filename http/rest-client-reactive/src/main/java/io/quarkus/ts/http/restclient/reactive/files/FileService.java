@@ -52,6 +52,18 @@ public class FileService {
         });
     }
 
+    @GET
+    @Path("/download-multipart")
+    public String downloadMultipart() {
+        FileWrapper wrapper = client.downloadMultipart();
+        try {
+            String path = wrapper.file.getAbsolutePath();
+            return BashUtils.getSum(path);
+        } catch (IOException | InterruptedException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     @POST
     @Path("/multipart")
     public Uni<String> uploadMultipart() {

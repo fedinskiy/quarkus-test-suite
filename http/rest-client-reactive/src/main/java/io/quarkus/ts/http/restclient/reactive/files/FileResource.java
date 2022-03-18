@@ -49,6 +49,15 @@ public class FileResource {
     }
 
     @GET
+    @Produces(MediaType.MULTIPART_FORM_DATA)
+    @javax.ws.rs.Path("/download-multipart")
+    public Response downloadMultipart() {
+        FileWrapper wrapper = new FileWrapper();
+        wrapper.file = FILE;
+        return Response.ok(wrapper).build();
+    }
+
+    @GET
     @Path("/hash")
     @Produces(MediaType.TEXT_PLAIN)
     public Uni<Response> hash() throws IOException, InterruptedException {

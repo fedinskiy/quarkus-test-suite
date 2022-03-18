@@ -30,6 +30,11 @@ public interface FileClient {
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     Uni<File> download();
 
+    @GET
+    @Produces(MediaType.MULTIPART_FORM_DATA)
+    @javax.ws.rs.Path("/download-multipart")
+    FileWrapper downloadMultipart();
+
     @POST
     @Consumes(MediaType.APPLICATION_OCTET_STREAM)
     @Produces(MediaType.TEXT_PLAIN)

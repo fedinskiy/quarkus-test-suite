@@ -66,6 +66,19 @@ public class FileIT {
     }
 
     @Test
+    public void downloadMultipart() {
+        Response hashSum = app.given().get("/files/hash");
+        assertEquals(HttpStatus.SC_OK, hashSum.statusCode());
+        String serverSum = hashSum.body().asString();
+
+        Response download = app.given().get("/client-wrapper/download-multipart");
+        assertEquals(HttpStatus.SC_OK, download.statusCode());
+        String clientSum = download.body().asString();
+
+        assertEquals(serverSum, clientSum);
+    }
+
+    @Test
     //FIXME create issue
     public void uploadRest() throws IOException, InterruptedException {
         BashUtils.createFile(UPLOADED.toString(), BIGGER_THAN_TWO_GIGABYTES);
