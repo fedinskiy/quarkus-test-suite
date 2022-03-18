@@ -1,11 +1,7 @@
 package io.quarkus.ts.http.restclient.reactive;
 
-import io.quarkus.test.bootstrap.RestService;
-import io.quarkus.test.scenarios.QuarkusScenario;
-import io.quarkus.test.services.QuarkusApplication;
-import io.restassured.response.Response;
-import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,8 +10,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.apache.http.HttpStatus;
+import org.junit.jupiter.api.Test;
+
+import io.quarkus.test.bootstrap.RestService;
+import io.quarkus.test.scenarios.QuarkusScenario;
+import io.quarkus.test.services.QuarkusApplication;
+import io.restassured.response.Response;
 
 @QuarkusScenario
 public class FileIT {
@@ -79,12 +80,12 @@ public class FileIT {
     }
 
     @Test
-    public void uploadPath() {
+    public void uploadFile() {
         Response hashSum = app.given().get("/client-wrapper/client-hash");
         assertEquals(HttpStatus.SC_OK, hashSum.statusCode());
         String before = hashSum.body().asString();
 
-        Response upload = app.given().post("/client-wrapper/upload-path");
+        Response upload = app.given().post("/client-wrapper/upload-file");
         assertEquals(HttpStatus.SC_OK, upload.statusCode());
         String after = upload.body().asString();
 
@@ -92,12 +93,12 @@ public class FileIT {
     }
 
     @Test
-    public void uploadFile() {
+    public void uploadMultipart() {
         Response hashSum = app.given().get("/client-wrapper/client-hash");
         assertEquals(HttpStatus.SC_OK, hashSum.statusCode());
         String before = hashSum.body().asString();
 
-        Response upload = app.given().post("/client-wrapper/upload-file");
+        Response upload = app.given().post("/client-wrapper/multipart");
         assertEquals(HttpStatus.SC_OK, upload.statusCode());
         String after = upload.body().asString();
 

@@ -53,9 +53,11 @@ public class FileService {
     }
 
     @POST
-    @Path("/upload-path")
-    public Uni<String> uploadPath() {
-        return client.sendPath(FILE);
+    @Path("/multipart")
+    public Uni<String> uploadMultipart() {
+        FileWrapper wrapper = new FileWrapper();
+        wrapper.file = FILE.toFile();
+        return client.sendMultipart(wrapper);
     }
 
     @POST

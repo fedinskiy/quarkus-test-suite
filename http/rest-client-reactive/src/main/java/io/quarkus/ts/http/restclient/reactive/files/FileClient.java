@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.eclipse.microprofile.rest.client.annotation.RegisterClientHeaders;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+import org.jboss.resteasy.reactive.MultipartForm;
 
 import io.smallrye.mutiny.Uni;
 
@@ -33,12 +34,12 @@ public interface FileClient {
     @Consumes(MediaType.APPLICATION_OCTET_STREAM)
     @Produces(MediaType.TEXT_PLAIN)
     @javax.ws.rs.Path("/upload")
-    Uni<String> sendPath(Path data); //fixme this sends file with file path as content. Need to create an issue
+    Uni<String> sendFile(File data);
 
     @POST
-    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.TEXT_PLAIN)
-    @javax.ws.rs.Path("/upload")
-    Uni<String> sendFile(File data);
+    @javax.ws.rs.Path("/upload-multipart")
+    Uni<String> sendMultipart(@MultipartForm FileWrapper data);
 
 }
