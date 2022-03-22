@@ -1,11 +1,7 @@
 package io.quarkus.ts.http.restclient.reactive;
 
-import io.quarkus.test.bootstrap.RestService;
-import io.quarkus.test.scenarios.QuarkusScenario;
-import io.quarkus.test.services.QuarkusApplication;
-import io.restassured.response.Response;
-import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,15 +10,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.apache.http.HttpStatus;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
+import io.quarkus.test.bootstrap.RestService;
+import io.quarkus.test.scenarios.QuarkusScenario;
+import io.quarkus.test.services.QuarkusApplication;
+import io.restassured.response.Response;
 
 @QuarkusScenario
 public class FileIT {
 
     private static final Path DOWNLOADED = Paths.get("target", "FileIT", "downloaded.txt").toAbsolutePath();
     private static final Path UPLOADED = Paths.get("target", "FileIT", "uploaded.txt").toAbsolutePath();
-    private static final String BIGGER_THAN_TWO_GIGABYTES = "2MiB";
+    private static final String BIGGER_THAN_TWO_GIGABYTES = "2049MiB";
 
     @QuarkusApplication
     static RestService app = new RestService().withProperties("modern.properties");
@@ -52,12 +54,27 @@ public class FileIT {
     }
 
     @Test
+    @Disabled("https://github.com/quarkusio/quarkus/issues/24402")
     public void download() {
         Response hashSum = app.given().get("/files/hash");
         assertEquals(HttpStatus.SC_OK, hashSum.statusCode());
         String serverSum = hashSum.body().asString();
 
-        Response download = app.given().get("/client-wrapper/download"); //FIXME file is not downloaded completely, should create an issue
+        Response download = app.given().get("/client-wrapper/download");
+        assertEquals(HttpStatus.SC_OK, download.statusCode());
+        String clientSum = download.body().asString();
+
+        assertEquals(serverSum, clientSum);
+    }
+
+    @Test
+    @Disabled("https://github.com/quarkusio/quarkus/issues/24415")
+    public void downloadMultipart() {
+        Response hashSum = app.given().get("/files/hash");
+        assertEquals(HttpStatus.SC_OK, hashSum.statusCode());
+        String serverSum = hashSum.body().asString();
+
+        Response download = app.given().get("/client-wrapper/download-multipart");
         assertEquals(HttpStatus.SC_OK, download.statusCode());
         String clientSum = download.body().asString();
 
@@ -79,12 +96,12 @@ public class FileIT {
     }
 
     @Test
-    public void uploadPath() {
+    public void uploadFile() {
         Response hashSum = app.given().get("/client-wrapper/client-hash");
         assertEquals(HttpStatus.SC_OK, hashSum.statusCode());
         String before = hashSum.body().asString();
 
-        Response upload = app.given().post("/client-wrapper/upload-path");
+        Response upload = app.given().post("/client-wrapper/upload-file");
         assertEquals(HttpStatus.SC_OK, upload.statusCode());
         String after = upload.body().asString();
 
@@ -92,12 +109,12 @@ public class FileIT {
     }
 
     @Test
-    public void uploadFile() {
+    public void uploadMultipart() {
         Response hashSum = app.given().get("/client-wrapper/client-hash");
         assertEquals(HttpStatus.SC_OK, hashSum.statusCode());
         String before = hashSum.body().asString();
 
-        Response upload = app.given().post("/client-wrapper/upload-file");
+        Response upload = app.given().post("/client-wrapper/multipart");
         assertEquals(HttpStatus.SC_OK, upload.statusCode());
         String after = upload.body().asString();
 

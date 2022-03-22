@@ -52,10 +52,24 @@ public class FileService {
         });
     }
 
+    @GET
+    @Path("/download-multipart")
+    public String downloadMultipart() {
+        FileWrapper wrapper = client.downloadMultipart();
+        try {
+            String path = wrapper.file.getAbsolutePath();
+            return BashUtils.getSum(path);
+        } catch (IOException | InterruptedException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     @POST
-    @Path("/upload-path")
-    public Uni<String> uploadPath() {
-        return client.sendPath(FILE);
+    @Path("/multipart")
+    public Uni<String> uploadMultipart() {
+        FileWrapper wrapper = new FileWrapper();
+        wrapper.file = FILE.toFile();
+        return client.sendMultipart(wrapper);
     }
 
     @POST

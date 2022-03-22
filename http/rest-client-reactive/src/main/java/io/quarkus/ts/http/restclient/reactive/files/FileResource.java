@@ -4,12 +4,15 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.jboss.resteasy.reactive.MultipartForm;
 
 import io.quarkus.ts.http.restclient.reactive.BashUtils;
 import io.smallrye.mutiny.Uni;
@@ -32,13 +35,26 @@ public class FileResource {
     @POST
     @Path("/upload")
     public Uni<Response> upload(File body) throws IOException, InterruptedException {
-        /*
-         * final java.nio.file.Path file = Paths.get(".").toAbsolutePath().getParent().getParent().resolve("client.txt")
-         * .toAbsolutePath();
-         * Files.copy(body, file);
-         */
         String sum = BashUtils.getSum(body.getAbsolutePath());
         return Uni.createFrom().item(Response.ok(sum).build());
+    }
+
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.TEXT_PLAIN)
+    @javax.ws.rs.Path("/upload-multipart")
+    public Uni<String> uploadMultipart(@MultipartForm FileWrapper body) throws IOException, InterruptedException {
+        String sum = BashUtils.getSum(body.file.getAbsolutePath());
+        return Uni.createFrom().item(sum);
+    }
+
+    @GET
+    @Produces(MediaType.MULTIPART_FORM_DATA)
+    @javax.ws.rs.Path("/download-multipart")
+    public Response downloadMultipart() {
+        FileWrapper wrapper = new FileWrapper();
+        wrapper.file = FILE;
+        return Response.ok(wrapper).build();
     }
 
     @GET
