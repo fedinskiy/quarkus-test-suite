@@ -82,8 +82,8 @@ public class FileIT {
     }
 
     @Test
-    //FIXME create issue
-    public void uploadRest() throws IOException, InterruptedException {
+    @Disabled("https://github.com/rest-assured/rest-assured/issues/1480")
+    public void uploadRestStream() throws IOException, InterruptedException {
         BashUtils.createFile(UPLOADED.toString(), BIGGER_THAN_TWO_GIGABYTES);
         String hashsum = BashUtils.getSum(UPLOADED.toString());
         try (InputStream stream = new FileInputStream(UPLOADED.toFile())) {
@@ -96,6 +96,19 @@ public class FileIT {
     }
 
     @Test
+    @Disabled
+    public void uploadRestFile() throws IOException, InterruptedException {
+        BashUtils.createFile(UPLOADED.toString(), BIGGER_THAN_TWO_GIGABYTES);
+        String hashsum = BashUtils.getSum(UPLOADED.toString());
+        Response response = app.given()
+                .body(UPLOADED.toFile())
+                .post("/files/upload/");
+        assertEquals(HttpStatus.SC_OK, response.statusCode());
+        assertEquals(hashsum, response.body().asString());
+    }
+
+    @Test
+    @Disabled("https://github.com/quarkusio/quarkus/issues/24405")
     public void uploadFile() {
         Response hashSum = app.given().get("/client-wrapper/client-hash");
         assertEquals(HttpStatus.SC_OK, hashSum.statusCode());
