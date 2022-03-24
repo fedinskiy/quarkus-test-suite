@@ -96,9 +96,19 @@ public class FileIT {
     }
 
     @Test
-    @Disabled
-    public void uploadRestFile() throws IOException, InterruptedException {
-        BashUtils.createFile(UPLOADED.toString(), BIGGER_THAN_TWO_GIGABYTES);
+    public void uploadRestFileBig() throws IOException, InterruptedException {
+        BashUtils.createFile(UPLOADED.toString(), "2048MiB");
+        String hashsum = BashUtils.getSum(UPLOADED.toString());
+        Response response = app.given()
+                .body(UPLOADED.toFile())
+                .post("/files/upload/");
+        assertEquals(HttpStatus.SC_OK, response.statusCode());
+        assertEquals(hashsum, response.body().asString());
+    }
+
+    @Test
+    public void uploadRestFileSmall() throws IOException, InterruptedException {
+        BashUtils.createFile(UPLOADED.toString(), "2047MiB");
         String hashsum = BashUtils.getSum(UPLOADED.toString());
         Response response = app.given()
                 .body(UPLOADED.toFile())
