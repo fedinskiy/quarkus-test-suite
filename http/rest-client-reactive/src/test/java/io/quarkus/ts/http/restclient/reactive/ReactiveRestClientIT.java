@@ -48,4 +48,51 @@ public class ReactiveRestClientIT {
         assertEquals("Hagakure", response.jsonPath().getString("title"));
         assertEquals("Tsuramoto", response.jsonPath().getString("author"));
     }
+
+    @Test
+    public void resourceDirectly() {
+        Response response = app.given()
+                .when()
+                .get("/books/?title=Catch-22&author=Heller");
+        assertEquals(HttpStatus.SC_OK, response.statusCode());
+        assertEquals("Catch-22", response.jsonPath().getString("title"));
+        assertEquals("Heller", response.jsonPath().getString("author"));
+    }
+
+    @Test
+    public void resourceClient() {
+        Response response = app.given()
+                .when()
+                .get("/client/book/?title=Catch-22&author=Heller");
+        assertEquals(HttpStatus.SC_OK, response.statusCode());
+        assertEquals("Catch-22", response.jsonPath().getString("title"));
+        assertEquals("Heller", response.jsonPath().getString("author"));
+    }
+
+    @Test
+    public void subResourceDirectly() {
+        Response response = app.given()
+                .when()
+                .get("/books/author/name");
+        assertEquals(HttpStatus.SC_OK, response.statusCode());
+        assertEquals("Cimrman", response.getBody().asString());
+    }
+
+    @Test
+    public void subResource() {
+        Response response = app.given().get("/client/book/author/?author=Heller");
+        assertEquals(HttpStatus.SC_OK, response.statusCode());
+        assertEquals("Heller", response.getBody().asString());
+
+        Response sub = app.given().get("/client/book/profession");
+        assertEquals(HttpStatus.SC_OK, sub.statusCode());
+        assertEquals("writer", sub.getBody().asString());
+    }
+
+    @Test
+    public void deepLevel() {
+        Response response = app.given().get("/client/book/currency");
+        assertEquals(HttpStatus.SC_OK, response.statusCode());
+        assertEquals("Heller", response.getBody().asString());
+    }
 }
