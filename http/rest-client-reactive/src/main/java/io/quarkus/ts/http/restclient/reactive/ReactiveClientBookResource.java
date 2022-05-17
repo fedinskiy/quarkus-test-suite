@@ -7,6 +7,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
@@ -43,7 +44,7 @@ public class ReactiveClientBookResource {
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public Uni<Book> getResource(@QueryParam("title") String title, @QueryParam("author") String author) {
+    public Uni<Response> getResource(@QueryParam("title") String title, @QueryParam("author") String author) {
         return bookInterface.getBook(title, author);
     }
 

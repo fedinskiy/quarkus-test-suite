@@ -71,6 +71,14 @@ public class ReactiveRestClientIT {
     }
 
     @Test
+    public void errorHandling() {
+        Response response = app.given()
+                .when()
+                .get("/client/book/?title=Necronomicon&author=Alhazred");
+        assertEquals(HttpStatus.SC_FORBIDDEN, response.statusCode());
+    }
+
+    @Test
     public void subResourceDirectly() {
         Response response = app.given()
                 .when()

@@ -6,11 +6,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.rest.client.annotation.RegisterClientHeaders;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-import io.quarkus.ts.http.restclient.reactive.json.Book;
 import io.smallrye.mutiny.Uni;
 
 @RegisterRestClient
@@ -23,7 +23,7 @@ public interface BookClient {
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    Uni<Book> getBook(@QueryParam("title") String title, @QueryParam("author") String author);
+    Uni<Response> getBook(@QueryParam("title") String title, @QueryParam("author") String author);
 
     @Path("/author")
     AuthorClient getAuthor();

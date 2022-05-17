@@ -8,6 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import io.quarkus.ts.http.restclient.reactive.json.Book;
 import io.smallrye.mutiny.Uni;
@@ -27,8 +28,11 @@ public class PlainBookResource {
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public Uni<Book> getBook(@QueryParam("title") String title, @QueryParam("author") String author) {
-        return Uni.createFrom().item(new Book(title, author));
+    public Uni<Response> getBook(@QueryParam("title") String title, @QueryParam("author") String author) {
+        return Uni.createFrom().item(() -> author.equalsIgnoreCase("Alhazred")
+                ? Response.status(Response.Status.FORBIDDEN)
+                : Response.ok(new Book(title, author)))
+                .map(Response.ResponseBuilder::build);
     }
 
     @GET
