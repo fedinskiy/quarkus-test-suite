@@ -44,7 +44,7 @@ public interface BookClient {
     @Produces(MediaType.TEXT_PLAIN)
     interface ProfessionClient {
         @GET
-        @Path("/name")
+        @Path("/title")
         Uni<String> getName();
 
         @Path("/wage")

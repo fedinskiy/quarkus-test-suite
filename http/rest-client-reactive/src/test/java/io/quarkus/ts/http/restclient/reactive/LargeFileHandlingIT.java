@@ -6,11 +6,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Predicate;
 
 import org.apache.http.HttpStatus;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledOnOs;
@@ -26,17 +30,20 @@ import io.restassured.response.Response;
 public class LargeFileHandlingIT {
 
     private static final String BIGGER_THAN_TWO_GIGABYTES = OsUtils.SIZE_2049MiB;
+    private static final Path files = getTempDirectory();
+
     private final Path downloaded;
     private final Path uploaded;
     private final OsUtils utils = OsUtils.get();
 
     @QuarkusApplication
-    static RestService app = new RestService().withProperties("modern.properties");
+    static RestService app = new RestService()
+            .withProperty("client.filepath", () -> files.toAbsolutePath().toString())
+            .withProperties("modern.properties");
 
-    public LargeFileHandlingIT() throws IOException {
-        downloaded = Files.createTempFile("downloaded", ".txt").toAbsolutePath();
-        Files.delete(downloaded);
-        uploaded = Files.createTempFile("uploaded", ".txt").toAbsolutePath();
+    public LargeFileHandlingIT() {
+        downloaded = files.resolve("downloaded.txt");
+        uploaded = files.resolve("uploaded.txt");
     }
 
     @Test
@@ -65,7 +72,6 @@ public class LargeFileHandlingIT {
     }
 
     @Test
-    @Disabled("https://github.com/quarkusio/quarkus/issues/24402")
     @DisabledOnOs(value = OS.WINDOWS, disabledReason = "https://github.com/quarkusio/quarkus/issues/24763")
     public void downloadThroughClient() {
         Response hashSum = app.given().get("/file/hash");
@@ -123,7 +129,6 @@ public class LargeFileHandlingIT {
     }
 
     @Test
-    @Disabled("https://github.com/quarkusio/quarkus/issues/24405")
     @DisabledOnOs(value = OS.WINDOWS, disabledReason = "https://github.com/quarkusio/quarkus/issues/24763")
     public void uploadFileThroughClient() {
         Response hashSum = app.given().get("/file-client/client-hash");
@@ -149,5 +154,32 @@ public class LargeFileHandlingIT {
         String after = upload.body().asString();
 
         assertEquals(before, after);
+    }
+
+    @Test
+    @DisabledOnOs(value = OS.WINDOWS, disabledReason = "https://github.com/quarkusio/quarkus/issues/24763")
+    public void multipartError() {
+        Response download = app.given().get("/file-client/download-broken-multipart");
+        assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, download.statusCode());
+        Predicate<String> containsError = line -> line.contains("Unable to parse multipart response - No delimiter specified");
+        Assertions.assertTrue(app.getLogs().stream().anyMatch(containsError));
+    }
+
+    private static Path getTempDirectory() {
+        try {
+            return Files.createTempDirectory("large_files");
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    @AfterAll
+    static void afterAll() throws IOException {
+        try (DirectoryStream<Path> paths = Files.newDirectoryStream(files)) {
+            for (Path path : paths) {
+                Files.delete(path);
+            }
+        }
+        Files.delete(files);
     }
 }
