@@ -23,6 +23,7 @@
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-confluent-registry-avro</artifactId>
+            <version>${quarkus.platform.version}</version>
         </dependency>
         <!-- Confluent AVRO libraries -->
         <dependency>

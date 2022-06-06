@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Optional;
 
-import javax.enterprise.event.Observes;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -18,7 +17,6 @@ import org.jboss.resteasy.reactive.MultipartForm;
 import org.jboss.resteasy.reactive.RestResponse;
 
 import io.quarkus.logging.Log;
-import io.quarkus.runtime.ShutdownEvent;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Uni;
 
@@ -88,9 +86,5 @@ public class FileResource {
     public Uni<String> hash() {
         Log.info("Hashing path " + file.getAbsolutePath());
         return utils.getSum(file.getAbsolutePath());
-    }
-
-    void onStop(@Observes ShutdownEvent ev) throws IOException {
-        Files.delete(file.toPath().toAbsolutePath());
     }
 }
