@@ -1,4 +1,4 @@
-package io.quarkus.ts.messaging.infinispan.grpc.kafka;
+package io.quarkus.ts.messaging.infinispan.grpc;
 
 import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
@@ -6,22 +6,16 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.Duration;
-
+import io.quarkus.test.bootstrap.InfinispanService;
+import io.quarkus.test.services.Container;
 import org.apache.http.HttpStatus;
-import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import io.quarkus.test.bootstrap.InfinispanService;
-import io.quarkus.test.bootstrap.KafkaService;
 import io.quarkus.test.bootstrap.RestService;
 import io.quarkus.test.scenarios.QuarkusScenario;
-import io.quarkus.test.services.Container;
-import io.quarkus.test.services.KafkaContainer;
 import io.quarkus.test.services.QuarkusApplication;
-import io.quarkus.test.services.containers.model.KafkaVendor;
-import io.quarkus.ts.messaging.infinispan.grpc.kafka.books.Book;
+import io.quarkus.ts.messaging.infinispan.grpc.books.Book;
 import io.restassured.http.ContentType;
 
 @QuarkusScenario
@@ -32,23 +26,20 @@ public class InfinispanKafkaIT {
     private static final String BOOK_TITLE = "testBook";
     private static final Book BOOK = new Book(BOOK_TITLE, "description", 2011);
 
-    @Container(image = "${infinispan.image}", expectedLog = "${infinispan.expected-log}", port = 11222)
-    static final InfinispanService infinispan = new InfinispanService()
-            .withConfigFile("infinispan-config.yaml")
-            .withSecretFiles("server.jks");
-
-    @KafkaContainer(vendor = KafkaVendor.CONFLUENT)
-    static final KafkaService kafka = new KafkaService();
+       @Container(image = "${infinispan.image}", expectedLog = "${infinispan.expected-log}", port = 11222)
+       static final InfinispanService infinispan = new InfinispanService()
+               .withConfigFile("infinispan-config.yaml")
+               .withSecretFiles("server.jks");
 
     @QuarkusApplication
     static final RestService app = new RestService()
-            .withProperty("quarkus.infinispan-client.server-list", infinispan::getInfinispanServerAddress)
-            .withProperty("quarkus.infinispan-client.auth-username", infinispan.getUsername())
-            .withProperty("quarkus.infinispan-client.auth-password", infinispan.getPassword())
+//            .withProperty("quarkus.infinispan-client.server-list", "localhost:11222")
+                        .withProperty("quarkus.infinispan-client.server-list", infinispan::getInfinispanServerAddress)
+            .withProperty("quarkus.infinispan-client.auth-username", "my_username")
+            .withProperty("quarkus.infinispan-client.auth-password", "my_password")
             .withProperty("quarkus.infinispan-client.trust-store", "secret::/server.jks")
             .withProperty("quarkus.infinispan-client.trust-store-password", "changeit")
-            .withProperty("quarkus.infinispan-client.trust-store-type", "jks")
-            .withProperty("kafka.bootstrap.servers", kafka::getBootstrapUrl);
+            .withProperty("quarkus.infinispan-client.trust-store-type", "jks");
 
     @Test
     public void testBookResource() {
@@ -99,14 +90,5 @@ public class InfinispanKafkaIT {
                 .then()
                 .statusCode(200)
                 .body(is("Hello World, Infinispan is up!"));
-    }
-
-    @Test
-    public void testPricesResource() {
-        Awaitility.await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> {
-            get("/prices/poll")
-                    .then()
-                    .statusCode(HttpStatus.SC_OK);
-        });
     }
 }

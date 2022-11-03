@@ -1,4 +1,4 @@
-package io.quarkus.ts.messaging.infinispan.grpc.kafka.books;
+package io.quarkus.ts.messaging.infinispan.grpc.books;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;

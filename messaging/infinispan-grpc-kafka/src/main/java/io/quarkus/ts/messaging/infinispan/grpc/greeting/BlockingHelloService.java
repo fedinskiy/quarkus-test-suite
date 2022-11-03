@@ -1,4 +1,4 @@
-package io.quarkus.ts.messaging.infinispan.grpc.kafka.greeting;
+package io.quarkus.ts.messaging.infinispan.grpc.greeting;
 
 import io.grpc.stub.StreamObserver;
 import io.quarkus.example.blocking.GreeterGrpc;

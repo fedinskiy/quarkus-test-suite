@@ -1,4 +1,4 @@
-package io.quarkus.ts.messaging.infinispan.grpc.kafka;
+package io.quarkus.ts.messaging.infinispan.grpc;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;

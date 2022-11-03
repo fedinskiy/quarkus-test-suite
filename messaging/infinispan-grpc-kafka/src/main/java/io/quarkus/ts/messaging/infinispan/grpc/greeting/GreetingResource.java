@@ -1,4 +1,4 @@
-package io.quarkus.ts.messaging.infinispan.grpc.kafka.greeting;
+package io.quarkus.ts.messaging.infinispan.grpc.greeting;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
