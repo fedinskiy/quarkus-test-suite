@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import org.eclipse.microprofile.rest.client.annotation.RegisterClientHeaders;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import org.jboss.resteasy.reactive.MultipartForm;
+import org.jboss.resteasy.reactive.RestResponse;
 
 import io.smallrye.mutiny.Uni;
 
@@ -33,7 +34,7 @@ public interface FileClient {
     @GET
     @Produces(MediaType.MULTIPART_FORM_DATA)
     @Path("/download-multipart")
-    Uni<FileWrapper> downloadMultipart();
+    RestResponse downloadMultipart();
 
     @GET
     @Produces(MediaType.MULTIPART_FORM_DATA)

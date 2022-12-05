@@ -68,12 +68,11 @@ public class FileClientResource {
 
     @GET
     @Path("/download-multipart")
-    public Uni<String> downloadMultipart() {
-        return client.downloadMultipart()
-                .map(wrapper -> wrapper.file.toPath())
-                .map(java.nio.file.Path::toAbsolutePath)
-                .invoke(deathRow::add)
-                .map(utils::getSum);
+    public String downloadMultipart() {
+        FileWrapper wrapper = (FileWrapper) client.downloadMultipart().getEntity();
+        java.nio.file.Path absolutePath = wrapper.file.toPath().toAbsolutePath();
+        deathRow.add(absolutePath);
+        return utils.getSum(absolutePath);
     }
 
     @GET

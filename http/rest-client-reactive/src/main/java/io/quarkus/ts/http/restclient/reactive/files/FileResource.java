@@ -70,11 +70,11 @@ public class FileResource {
     @Produces(MediaType.MULTIPART_FORM_DATA)
     @Path("/download-multipart")
     // @Blocking -> https://github.com/quarkusio/quarkus/issues/25909
-    public FileWrapper downloadMultipart() {
+    public RestResponse<FileWrapper> downloadMultipart() {
         FileWrapper wrapper = new FileWrapper();
         wrapper.file = file;
         wrapper.name = file.getName();
-        return wrapper;
+        return RestResponse.ok(wrapper);
     }
 
     @GET
