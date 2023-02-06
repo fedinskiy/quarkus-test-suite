@@ -40,10 +40,6 @@
             <artifactId>quarkus-elytron-security-properties-file</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-smallrye-openapi</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.quarkus.qe</groupId>
             <artifactId>quarkus-test-service-database</artifactId>
             <scope>test</scope>
@@ -74,6 +70,15 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        <profile>
+            <id>fail</id>
+            <dependencies>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-smallrye-openapi</artifactId>
+                </dependency>
+            </dependencies>
         </profile>
     </profiles>
 </project>
