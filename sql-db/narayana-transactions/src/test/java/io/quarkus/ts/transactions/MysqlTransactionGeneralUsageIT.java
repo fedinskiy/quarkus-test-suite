@@ -10,7 +10,6 @@ import io.quarkus.test.scenarios.QuarkusScenario;
 import io.quarkus.test.services.Container;
 import io.quarkus.test.services.QuarkusApplication;
 
-// TODO https://github.com/quarkus-qe/quarkus-test-suite/issues/756
 @Tag("fips-incompatible") // native-mode
 @QuarkusScenario
 @DisabledOnOs(value = OS.WINDOWS, disabledReason = "Windows does not support Linux Containers / Testcontainers (Jaeger)")
