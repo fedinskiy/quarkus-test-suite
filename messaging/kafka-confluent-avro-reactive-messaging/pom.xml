@@ -16,7 +16,7 @@
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-resteasy-jsonb</artifactId>
+            <artifactId>quarkus-rest-jsonb</artifactId>
         </dependency>
         <!-- Quarkus extension for generating Java code from Avro schemas -->
         <!-- with this, you don't have to use avro-maven-plugin -->
@@ -46,6 +46,10 @@
             <groupId>io.quarkus.qe</groupId>
             <artifactId>quarkus-test-service-kafka</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-rest</artifactId>
         </dependency>
     </dependencies>
     <repositories>

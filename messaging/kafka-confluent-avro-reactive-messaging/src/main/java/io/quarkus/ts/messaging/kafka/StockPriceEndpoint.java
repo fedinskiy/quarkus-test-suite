@@ -6,19 +6,20 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.reactive.messaging.OnOverflow;
-import org.jboss.resteasy.annotations.SseElementType;
-import org.reactivestreams.Publisher;
+import org.jboss.logging.Logger;
+import org.jboss.resteasy.reactive.RestStreamElementType;
+
+import io.smallrye.mutiny.Multi;
 
 @Path("/stock-price")
 public class StockPriceEndpoint {
-
+    private static final Logger LOG = Logger.getLogger(StockPriceEndpoint.class);
     @Inject
     @Channel("source-stock-price")
     @OnOverflow(value = OnOverflow.Strategy.DROP)
@@ -26,30 +27,24 @@ public class StockPriceEndpoint {
 
     @Inject
     @Channel("price-stream")
-    Publisher<String> stockPrices;
+    Multi<String> stockPrices;
 
     @Inject
     @Channel("price-stream-batch")
-    Publisher<List<String>> stockPricesBatch;
+    Multi<List<String>> stockPricesBatch;
 
     @GET
     @Path("/stream")
-    @Produces(MediaType.SERVER_SENT_EVENTS)
-    @SseElementType(MediaType.APPLICATION_JSON)
-    public Publisher<String> stream() {
+    @RestStreamElementType(MediaType.TEXT_PLAIN)
+    public Multi<String> stream() {
+        LOG.warn("stream");
         return stockPrices;
     }
 
-    @GET
-    @Path("/stream-batch")
-    @Produces(MediaType.SERVER_SENT_EVENTS)
-    @SseElementType(MediaType.APPLICATION_JSON)
-    public Publisher<List<String>> streamBatch() {
-        return stockPricesBatch;
-    }
 
     @POST
     public Response addStockPrice(StockPriceDto stockPrice) {
+        LOG.warn("add price " + stockPrice.getValue());
         stockPriceEmitter.send(stockPrice.toAvro());
         return Response.accepted().build();
     }
