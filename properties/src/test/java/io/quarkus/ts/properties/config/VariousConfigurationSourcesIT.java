@@ -14,8 +14,9 @@ import io.quarkus.test.services.QuarkusApplication;
 @QuarkusScenario
 public class VariousConfigurationSourcesIT {
 
-    @QuarkusApplication
-    static RestService app = new RestService().withProperty("welcome.message", "Welcome message from system property");
+    @QuarkusApplication(builder = PomFilteringBuilder.class)
+    static RestService app = new RestService()
+            .withProperty("welcome.message", "Welcome message from system property");
 
     @Test
     public void testEnvFile() {
@@ -38,11 +39,12 @@ public class VariousConfigurationSourcesIT {
 
     @Test
     public void testYamlPropertiesByInterfaceNested() {
+        // content from application-prod should overload the message
         given()
                 .when().get("/hello/protagonist/friend")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .body(is("Patrick Star says: Hi, I am Patrick Star"));
+                .body(is("Patrick Star says: Hello, I am Patrick Star"));
     }
 
     @Test
