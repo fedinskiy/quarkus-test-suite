@@ -1,8 +1,5 @@
 package io.quarkus.ts.mcp;
 
-import org.junit.jupiter.api.condition.DisabledOnOs;
-import org.junit.jupiter.api.condition.OS;
-
 import io.quarkus.test.bootstrap.BaseService;
 import io.quarkus.test.bootstrap.RestService;
 import io.quarkus.test.scenarios.QuarkusScenario;
@@ -13,7 +10,6 @@ import io.quarkus.ts.mcp.app.MCPClient;
 import io.quarkus.ts.mcp.app.MyResources;
 
 @QuarkusScenario
-@DisabledOnOs(value = OS.WINDOWS, disabledReason = "https://github.com/quarkiverse/quarkus-langchain4j/issues/2230")
 public class StdioIT extends BasicMCPIT {
 
     @QuarkusApplication(boms = { @Dependency(artifactId = "quarkus-mcp-server-bom") }, dependencies = {
