@@ -20,14 +20,14 @@
             <dependency>
                 <groupId>${quarkus.platform.group-id}</groupId>
                 <artifactId>quarkus-langchain4j-bom</artifactId>
-                <version>${quarkus.platform.version}</version>
+                <version>${platform.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>${quarkus.platform.group-id}</groupId>
                 <artifactId>quarkus-mcp-server-bom</artifactId>
-                <version>${quarkus.platform.version}</version>
+                <version>${platform.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -85,6 +85,7 @@
                                     <!-- Passing values to cloned applications -->
                                     <!-- Langchain4j extensions are not in core, so use platform prefix by default -->
                                     <quarkus.platform.group-id>${quarkus.platform.group-id}</quarkus.platform.group-id>
+                                    <quarkus.platform.version>${platform.version}</quarkus.platform.version>
                                 </systemPropertyVariables>
                             </configuration>
                         </execution>

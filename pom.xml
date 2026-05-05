@@ -1078,5 +1078,17 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>separate-platform</id>
+<!--            <activation>-->
+<!--                <property>-->
+<!--                    <name>quarkus.platform.version</name>-->
+<!--                    <value>999-SNAPSHOT</value>-->
+<!--                </property>-->
+<!--            </activation>-->
+            <properties>
+                <platform.version>999-SNAPSHOT+qe</platform.version>
+            </properties>
+        </profile>
     </profiles>
 </project>
